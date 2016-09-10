@@ -172,7 +172,7 @@ public final class Main extends JFrame implements ActionListener{
         if(e.getSource()==Add){
             num1=Double.parseDouble(display.getText());
             Operator=1;
-            display.setText("+");
+            display.setText("");
         }
         
         if(e.getSource()==Multiply){
