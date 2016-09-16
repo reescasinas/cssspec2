@@ -1,15 +1,8 @@
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -37,6 +30,7 @@ public final class Main extends JFrame implements ActionListener{
     private static JButton Div = new JButton("/");
     private static JButton Sub = new JButton("-");
     private static JButton Period = new JButton(".");
+    private static JButton Negative = new JButton("+ / -");
     private static JButton Clear = new JButton("C");
     private static JButton Equals = new JButton("=");
     
@@ -45,7 +39,7 @@ public final class Main extends JFrame implements ActionListener{
    
     
     public Main() throws FileNotFoundException{
-     frame = new JFrame("ACM Raffle Draw");  
+     frame = new JFrame("Calc");  
       frame.setSize(420, 468);
       frame.setLayout(null);
       frame.setLocationRelativeTo(null);    //center
@@ -60,8 +54,9 @@ public final class Main extends JFrame implements ActionListener{
       one.setBounds(80,150,60,30);
       two.setBounds(140,150,60,30);
       three.setBounds(200,150,60,30);
-      zero.setBounds(80,180,90,30);
-      Period.setBounds(170,180,90,30);
+      zero.setBounds(80,180,60,30);
+      Period.setBounds(140,180,60,30);
+      Negative.setBounds(200,180,60,30);
       Add.setBounds(260,90,50,30);
       Div.setBounds(260,120,50,30);
       Multiply.setBounds(260,150,50,30);
@@ -82,6 +77,7 @@ public final class Main extends JFrame implements ActionListener{
       three.addActionListener(this);
       zero.addActionListener(this);
       Period.addActionListener(this);
+      Negative.addActionListener(this);
       Add.addActionListener(this);
       Multiply.addActionListener(this);
       Div.addActionListener(this);
@@ -90,8 +86,6 @@ public final class Main extends JFrame implements ActionListener{
       Equals.addActionListener(this);
       
      
-      
-      
       frame.add(display);
       frame.add(seven);
       frame.add(eight);
@@ -104,6 +98,7 @@ public final class Main extends JFrame implements ActionListener{
       frame.add(three);
       frame.add(zero);
       frame.add(Period);
+      frame.add(Negative);
       frame.add(Add);
       frame.add(Multiply);
       frame.add(Div);
@@ -120,105 +115,119 @@ public final class Main extends JFrame implements ActionListener{
     }//end Main
 
     
-  
+    @Override
     public void actionPerformed (ActionEvent e) {      
-        
+         try
+        {
        // Numbers
         if(e.getSource()==seven){
             display.setText(display.getText().concat("7"));
         }
         
-        if(e.getSource()==eight){
+        else if(e.getSource()==eight){
            display.setText(display.getText().concat("8"));
         }
         
-        if(e.getSource()==nine){
+        else if(e.getSource()==nine){
             display.setText(display.getText().concat("9"));
         }
         
-        if(e.getSource()==four){
+        else if(e.getSource()==four){
             display.setText(display.getText().concat("4"));
         }
         
-        if(e.getSource()==five){
+        else if(e.getSource()==five){
             display.setText(display.getText().concat("5"));
         }
         
-        if(e.getSource()==six){
+        else if(e.getSource()==six){
             display.setText(display.getText().concat("6"));
         }
         
-        if(e.getSource()==one){
+        else if(e.getSource()==one){
             display.setText(display.getText().concat("1"));
         }
         
-        if(e.getSource()==two){
+        else if(e.getSource()==two){
             display.setText(display.getText().concat("2"));
         }
         
-        if(e.getSource()==three){
+        else if(e.getSource()==three){
             display.setText(display.getText().concat("3"));
         }
         
-        if(e.getSource()==zero){
+        else if(e.getSource()==zero){
             display.setText(display.getText().concat("0"));
         }
         
-        if(e.getSource()==Period){
+        else if(e.getSource()==Period){
             display.setText(display.getText().concat("."));
+        }
+        else if(e.getSource()==Negative){
+            double sign = Double.parseDouble(String.valueOf(display.getText()));
+            sign = sign * (-1);
+            display.setText(String.valueOf(sign));
         }
         
         // Operations
         if(e.getSource()==Add){
             num1=Double.parseDouble(display.getText());
+            display.setText("");
             Operator=1;
-            display.setText("");
         }
-        
-        if(e.getSource()==Multiply){
+        else if(e.getSource()==Multiply){
             num1=Double.parseDouble(display.getText());
+            display.setText("");
             Operator=2;
-            display.setText("");
         }
-        
-        if(e.getSource()==Div){
+        else if(e.getSource()==Div){
             num1=Double.parseDouble(display.getText());
+            display.setText("");
             Operator=3;
+        }
+        else if(e.getSource()==Sub){
+            num1=Double.parseDouble(display.getText());
             display.setText("");
+            Operator=4;
         }
         
-        if(e.getSource()==Sub){
-            num1=Double.parseDouble(display.getText());
-            Operator=4;
-            display.setText("");
+       
+        if(e.getSource()==Equals){
+            
+            String value;
+            num2=Double.parseDouble(display.getText());
+            
+            if(Operator == 1) {
+                Result = num1 + num2;
+                value = String.format("%.0f", Result);
+                display.setText(value);
+            }
+            else if(Operator == 2) {
+                Result = num1 * num2;
+                value = String.format("%.0f", Result);
+                display.setText(value);
+            }
+            else if(Operator == 3) {
+                Result = num1 / num2;
+                value = String.format("%.0f", Result);
+                display.setText(value);
+            }
+            else if(Operator == 4) {
+                Result = num1 - num2;
+                value = String.format("%.0f", Result);
+                display.setText(value);
+            }
+            
+
+        }
+        }catch(NumberFormatException nfe){
+            JOptionPane.showMessageDialog(null, nfe);
+        }catch(RuntimeException re){
+            JOptionPane.showMessageDialog(null, re);
         }
         
         if(e.getSource()==Clear){
             display.setText(null);
-        }
-        
-        if(e.getSource()==Equals){
-           
-            num2=Double.parseDouble(display.getText());
-            
-            switch(Operator)
-            {
-                case 1: Result=num1+num2;
-                    break;
-        
-                case 2: Result=num1*num2;
-                    break;
-        
-                case 3: Result=num1/num2;
-                    break;
-        
-                case 4: Result=num1-num2;
-                    break;
-        
-                default: Result=0;
-            }
-        
-            display.setText("="+Result);
         }
     }//end action performed()
          
@@ -227,6 +236,5 @@ public final class Main extends JFrame implements ActionListener{
             gui.frame.setVisible(true);
             
     }
-    
-    
+
 }
